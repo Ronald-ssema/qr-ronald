@@ -1,86 +1,132 @@
-# 📲 QR Code Generator — Ronald Ssemawere
+# 📱 QR Code Generator — Ronald Ssemawere
 
-This project generates a clean, professional QR code that links to my personal portfolio / contact hub:
+![Python](https://img.shields.io/badge/Python-3.9+-blue)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+![Made with ❤️](https://img.shields.io/badge/Made%20with-%E2%9D%A4-red)
 
-👉 **https://ronald-ssema.github.io/qr-ronald/**
+This project generates a clean, customizable QR code that links to my personal portfolio/contact hub.
 
-The QR code image is automatically created using Python and saved as:
+🔗 **Live Page:**  
+👉 https://ronald-ssema.github.io/qr-ronald/
+
+The QR image is automatically generated using Python and saved locally.
+
+---
+
+## 📸 Preview
+
+Generated QR code (example):
+
+```
+guvnorace_links_qr.png
+```
+
+> _(You can embed the actual image here once committed)_  
+> `![QR Code](guvnorace_links_qr.png)`
 
 ---
 
 ## 🚀 Features
-- Generates a QR code automatically  
-- Saves QR as a PNG image  
-- Easy to customize (size, border, ECC, colors)  
-- Integrated with GitHub Pages for instant hosting  
+
+- Automatically generates a QR code  
+- Saves the QR as a PNG image  
+- Customizable (size, border, ECC, colors)  
+- Fully deployable with GitHub Pages  
+- Simple + clean HTML landing page  
 
 ---
 
-## 🛠️ Technologies Used
+## 🧰 Technologies Used
+
 - **Python 3.9+**
-- **qrcode** library  
-- **Pillow (PIL)** for image handling  
-- **GitHub Pages** for deployment  
+- **qrcode** library
+- **Pillow (PIL)** for image handling
+- **GitHub Pages** for deployment
 
 ---
 
-## 📦 Installation
+## 📁 Project Structure
+
+```
+qr-ronald/
+ ├── main.py
+ ├── requirements.txt
+ ├── index.html
+ ├── guvnorace_links_qr.png
+ └── README.md
+```
+
+---
+
+## 🛠 Installation
 
 Clone the repository:
 
 ```bash
 git clone https://github.com/Ronald-ssema/qr-ronald.git
 cd qr-ronald
-
-python3 -m venv .venv
-source .venv/bin/activate
+```
 
 Create a virtual environment:
 
+```bash
 python3 -m venv .venv
 source .venv/bin/activate
+```
 
 Install dependencies:
 
+```bash
 pip install -r requirements.txt
+```
 
-▶️ Running the Project
+---
+
+## ▶️ Running the Project
 
 Run the main script:
 
+```bash
 python main.py
+```
 
-This will generate:
+This generates:
 
+```
 guvnorace_links_qr.png
+```
 
-Scan it with your smartphone camera to open the link.
+Scan it with your smartphone to open the link.
 
-🌐 GitHub Pages Deployment
+---
 
-This project includes a simple index.html page and is deployed automatically using GitHub Pages.
+## 🌐 GitHub Pages Deployment
 
-View the live page here:
+This project includes a simple `index.html` page and deploys automatically using GitHub Pages.
+
+Live page:  
 👉 https://ronald-ssema.github.io/qr-ronald/
 
-📸 Output Example
+---
 
-Generated QR code file:
+## 🔮 Future Improvements
 
-guvnorace_links_qr.png
+- Add color customization  
+- Add a logo inside the QR  
+- Build a simple UI for generating QR codes online  
+- Add a **Download QR** button to the hosted page  
 
-📚 Future Improvements
+---
 
-Add color customization
+## 👤 Author
 
-Add a logo inside the QR code
+**Ronald Ssemawere**  
+Second-year Computer Science Student  
+University of Reading  
 
-Build a simple UI for generating QR codes online
+---
 
-Create a download button on the hosted page
+## 📄 License
 
-👤 Author
-
-Ronald Ssemawere
-Second-year Computer Science Student
-University of Reading
+This project is licensed under the **MIT License**.
