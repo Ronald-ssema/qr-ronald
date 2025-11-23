@@ -1,77 +1,40 @@
-# format_info.py
-from typing import List, Tuple
+from typing import List
 
-QR_SIZE = 21  # Version 1
+QR_SIZE = 21
 
-# ECC level bits (2-bit)
-ECC_BITS = {
-    "L": 0b01,
-    "M": 0b00,
-    "Q": 0b11,
-    "H": 0b10,
-}
+# Format info positions for Version 1
+FORMAT_POS_1 = [
+    (8,0),(8,1),(8,2),(8,3),(8,4),(8,5),(8,7),(8,8),
+    (7,8),(5,8),(4,8),(3,8),(2,8),(1,8),(0,8),
+]
+FORMAT_POS_2 = [
+    (20,8),(19,8),(18,8),(17,8),(16,8),(15,8),(14,8),
+    (13,8),(8,20),(8,19),(8,18),(8,17),(8,16),(8,15),(8,14),
+]
 
-# BCH generator for format info
-FORMAT_POLY = 0b10100110111  # 0x537
-FORMAT_MASK = 0b101010000010010  # 0x5412
+FORMAT_MASK = 0b101010000010010
 
+ECC_BITS = {"L": 0b01, "M": 0b00, "Q": 0b11, "H": 0b10}
 
-def _bch_remainder(bits: int) -> int:
-    """
-    Compute BCH remainder for 5-bit format data shifted left by 10.
-    """
-    # bits is already (data << 10)
-    for i in range(14, 9, -1):  # from bit 14 down to 10
-        if (bits >> i) & 1:
-            bits ^= FORMAT_POLY << (i - 10)
-    return bits & 0b1111111111  # 10 bits remainder
-
+def bch_encode_15_5(value: int) -> int:
+    # generator polynomial: x^10 + x^8 + x^5 + x^4 + x^2 + x + 1  (0b10100110111)
+    g = 0b10100110111
+    v = value << 10
+    for i in range(14, 9, -1):
+        if (v >> i) & 1:
+            v ^= g << (i - 10)
+    return (value << 10) | v
 
 def get_format_bits(ecc_level: str, mask_id: int) -> str:
-    """
-    Return final 15-bit format string (MSB-first) after BCH + XOR mask.
-    """
-    if ecc_level not in ECC_BITS:
-        raise ValueError("ecc_level must be one of L, M, Q, H")
-    if not (0 <= mask_id <= 7):
-        raise ValueError("mask_id must be 0..7")
+    data = (ECC_BITS[ecc_level] << 3) | mask_id
+    bits15 = bch_encode_15_5(data) ^ FORMAT_MASK
+    return format(bits15, "015b")
 
-    data5 = (ECC_BITS[ecc_level] << 3) | mask_id  # 5 bits
-    bits = data5 << 10
-    rem = _bch_remainder(bits)
-    fmt15 = (data5 << 10) | rem
-    fmt15 ^= FORMAT_MASK
+def add_format_info(matrix: List[List[int]], ecc_level="L", mask_id=0) -> None:
+    bits = get_format_bits(ecc_level, mask_id)
 
-    return format(fmt15, "015b")
+    for (r,c), b in zip(FORMAT_POS_1, bits):
+        matrix[r][c] = int(b)
 
-
-def add_format_info(matrix: List[List[int]], ecc_level: str = "L", mask_id: int = 0) -> None:
-    """
-    Write the 15 format bits into the two required locations.
-    Coordinates follow QR spec for Version 1 (21x21).
-    """
-    fmt = get_format_bits(ecc_level, mask_id)
-
-    # First copy (around top-left finder)
-    coords1: List[Tuple[int, int]] = [
-        (8, 0), (8, 1), (8, 2), (8, 3), (8, 4), (8, 5),
-        (8, 7), (8, 8),
-        (7, 8),
-        (5, 8), (4, 8), (3, 8), (2, 8), (1, 8), (0, 8)
-    ]
-
-    # Second copy (top-right row + bottom-left col)
-    coords2: List[Tuple[int, int]] = [
-        (QR_SIZE - 1, 8), (QR_SIZE - 2, 8), (QR_SIZE - 3, 8),
-        (QR_SIZE - 4, 8), (QR_SIZE - 5, 8), (QR_SIZE - 6, 8),
-        (QR_SIZE - 7, 8),
-        (8, QR_SIZE - 1), (8, QR_SIZE - 2), (8, QR_SIZE - 3),
-        (8, QR_SIZE - 4), (8, QR_SIZE - 5), (8, QR_SIZE - 6),
-        (8, QR_SIZE - 7), (8, QR_SIZE - 8)
-    ]
-
-    for i, (r, c) in enumerate(coords1):
-        matrix[r][c] = int(fmt[i])
-
-    for i, (r, c) in enumerate(coords2):
-        matrix[r][c] = int(fmt[i])
+    for (r,c), b in zip(FORMAT_POS_2, bits):
+        matrix[r][c] = int(b)
