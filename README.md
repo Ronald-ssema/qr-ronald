@@ -19,7 +19,8 @@ The QR image is automatically generated using Python and saved locally.
 Generated QR code (example):
 
 ```
-guvnorace_links_qr.png
+<img width="819" height="801" alt="Screenshot 2025-11-23 at 02 17 09" src="https://github.com/user-attachments/assets/d6675ece-5374-4ce5-95d7-086c1f5abd95" />
+.png
 ```
 
 > _(You can embed the actual image here once committed)_  
